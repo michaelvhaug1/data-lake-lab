@@ -39,10 +39,14 @@ and start straight-line depreciation; actual unit cost vs. standard cost posts t
 
 ## How to access the data from Python (VS Code)
 
-Open the folder `C:\Users\micha\data-lake-lab` in VS Code (File → Open Folder). The
-workspace settings select the `.venv` interpreter automatically. Practice scripts go in
-`tutorials\` and run with the ▶ button. **`tutorials/` is gitignored** — anything in it
-stays local and never reaches GitHub, so it's a safe dumping ground for scratch work.
+`from lab import rows` works **from any folder and with either Python on this machine**
+(the lab's `.venv` and the main Python 3.12 install): the lab folder is registered on
+both import paths via a `data-lake-lab.pth` file in each `site-packages`, and `lab.py`
+locates `.env` and the data relative to itself. No `cd` needed.
+
+Practice scripts live in `C:\Users\micha\data-lake-lab\tutorials\` and run with the ▶
+button in VS Code. **`tutorials/` is gitignored** — anything in it stays local and never
+reaches GitHub, so it's a safe dumping ground for scratch work.
 
 ```python
 from lab import rows, sql, snowflake_sql
