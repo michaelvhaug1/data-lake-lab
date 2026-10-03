@@ -13,6 +13,8 @@ generate_data.py ──▶ data/bronze/*.parquet ──ingest.py──▶ object
 Dagster orchestrates all of it: source_files ─▶ bronze/* ─▶ silver/* ─▶ gold/*
 ```
 
+**Handing this to someone or an AI? Give them CONTEXT.md** — full schema, every column, and the Python calls.
+
 ## The data  (24 months, Oct 2024 – Sep 2026, seeded so it regenerates identically)
 
 | Table | Rows | What it is |
