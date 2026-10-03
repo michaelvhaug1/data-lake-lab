@@ -40,8 +40,9 @@ and start straight-line depreciation; actual unit cost vs. standard cost posts t
 ## How to access the data from Python (VS Code)
 
 Open the folder `C:\Users\micha\data-lake-lab` in VS Code (File → Open Folder). The
-workspace settings select the `.venv` interpreter automatically. Put scripts anywhere
-in the folder (`tutorials\` is the convention) and run them with the ▶ button.
+workspace settings select the `.venv` interpreter automatically. Practice scripts go in
+`tutorials\` and run with the ▶ button. **`tutorials/` is gitignored** — anything in it
+stays local and never reaches GitHub, so it's a safe dumping ground for scratch work.
 
 ```python
 from lab import rows, sql, snowflake_sql
@@ -250,9 +251,11 @@ OTIF definition used in gold: on time = `received_date <= promised_date`; in ful
 | Snowflake | account `WDZFJTQ-OWB53326`, db `LAKE`, warehouse `LAKE_WH`, user `LAKE_SVC` (key-pair), role `LAKE_DEV` |
 | Orchestration | `pipeline/definitions.py` — `run-dagster.cmd` → http://localhost:3000 |
 | Python helper | `lab.py` — `rows()`, `sql()`, `snowflake_sql()` |
+| Practice scripts | `tutorials/` — **gitignored**, local only |
 | Repo | https://github.com/michaelvhaug1/data-lake-lab |
 
 ## Change log
 
 - **2026-10-02 — iteration 1.** Initial dataset (15 bronze tables), 3 silver + 7 gold
   models with 20 tests, verified on DuckDB-over-R2 and Snowflake. `lab.py` helper added.
+  `tutorials/` folder created for practice scripts and gitignored.
