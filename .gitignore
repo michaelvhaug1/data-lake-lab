@@ -15,3 +15,6 @@ __pycache__/
 !.env.local-minio
 snowflake/rsa_key.p8
 data/
+
+# scratch practice scripts, never committed
+tutorials/
