@@ -1,0 +1,35 @@
+version: 2
+
+sources:
+  - name: bronze
+    description: Raw Parquet landed by ingest.py; dbt-duckdb reads it in place from the lake.
+    schema: bronze          # on Snowflake these are the LAKE.BRONZE tables loaded by snowflake/load_bronze.py
+    meta:
+      # {name} = table name below. One rule covers every table.
+      external_location: "s3://{{ env_var('LAKE_BUCKET', 'lake') }}/bronze/{name}/*.parquet"
+    tables:
+      - name: regions
+      - name: hubs
+        description: Regional integration hubs where components are staged and racks are built.
+      - name: suppliers
+      - name: components
+        description: Purchasable parts with a standard cost; PPV is measured against it.
+      - name: server_skus
+      - name: bom
+        description: Components per server unit for each SKU.
+      - name: purchase_orders
+        description: One row per PO line; promised vs received date and qty drive OTIF.
+      - name: inventory_snapshots
+        description: Month-end on-hand / on-order per hub and component.
+      - name: capacity_forecast
+        description: Rack demand forecast by region and family; P6M (6-month plan) and P1M (1-month commit) versions.
+      - name: rack_deployments
+        description: One row per rack from request to live, with capitalized cost and useful life.
+      - name: supplier_invoices
+        description: AP invoices tied to PO numbers.
+      - name: cost_centers
+      - name: gl_accounts
+      - name: gl_journal
+        description: Posted journal lines; positive = debit, negative = credit.
+      - name: budget
+        description: Monthly opex budget by cost center and account.

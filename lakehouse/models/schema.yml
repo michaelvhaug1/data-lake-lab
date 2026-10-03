@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: stg_purchase_orders
+    columns:
+      - name: po_line_id
+        data_tests: [not_null, unique]
+      - name: supplier_id
+        data_tests: [not_null]
+      - name: qty_received
+        data_tests:
+          - not_null
+          - dbt_utils_free_accepted_range:
+              arguments:
+                min_value: 0
+  - name: stg_gl_journal
+    columns:
+      - name: journal_id
+        data_tests: [not_null, unique]
+      - name: amount_usd
+        data_tests: [not_null]
+  - name: stg_rack_deployments
+    columns:
+      - name: rack_id
+        data_tests: [not_null, unique]
+      - name: capex_usd
+        data_tests: [not_null]
+
+  - name: fct_supplier_otif
+    data_tests:
+      - dbt_utils_free_unique_combination:
+          arguments:
+            combination: [promised_month, supplier_id]
+    columns:
+      - name: otif_pct
+        data_tests:
+          - dbt_utils_free_accepted_range:
+              arguments:
+                min_value: 0
+                max_value: 100
+  - name: fct_purchase_price_variance
+    columns:
+      - name: ppv_usd
+        data_tests: [not_null]
+  - name: fct_capacity_plan_vs_actual
+    data_tests:
+      - dbt_utils_free_unique_combination:
+          arguments:
+            combination: [forecast_month, region_code, sku_family]
+  - name: fct_inventory_days_of_supply
+    data_tests:
+      - dbt_utils_free_unique_combination:
+          arguments:
+            combination: [snapshot_date, hub_id, component_id]
+  - name: fct_budget_vs_actual
+    data_tests:
+      - dbt_utils_free_unique_combination:
+          arguments:
+            combination: [fiscal_month, cost_center_id, account_id]
+  - name: fct_ap_aging
+    columns:
+      - name: supplier_id
+        data_tests: [not_null, unique]
+  - name: fct_capex_by_region
+    columns:
+      - name: capex_usd
+        data_tests: [not_null]

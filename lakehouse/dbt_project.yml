@@ -1,0 +1,17 @@
+name: lakehouse
+version: "1.0.0"
+profile: lakehouse
+
+model-paths: ["models"]
+target-path: "target"
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  lakehouse:
+    staging:
+      +materialized: table
+      +schema: silver
+    marts:
+      # DuckDB: written back to the lake as Parquet ("external"). Snowflake: ordinary tables.
+      +materialized: "{{ 'external' if target.type == 'duckdb' else 'table' }}"
+      +schema: gold

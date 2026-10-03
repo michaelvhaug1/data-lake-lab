@@ -1,0 +1,33 @@
+# dbt-duckdb profile. DuckDB is the engine; the lake lives in MinIO (S3 API).
+# To point at Cloudflare R2 / Backblaze B2 / AWS S3 instead, change the
+# endpoint + keys (or set the AWS_* env vars) and s3_use_ssl: true.
+lakehouse:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../warehouse.duckdb
+      threads: 4
+      extensions: [httpfs, parquet]
+      settings:
+        s3_endpoint: "{{ env_var('S3_ENDPOINT', 'localhost:9000') }}"
+        s3_access_key_id: "{{ env_var('AWS_ACCESS_KEY_ID', 'lakeadmin') }}"
+        s3_secret_access_key: "{{ env_var('AWS_SECRET_ACCESS_KEY', 'lakeadmin123') }}"
+        s3_region: "{{ env_var('AWS_DEFAULT_REGION', 'us-east-1') }}"
+        s3_use_ssl: "{{ env_var('S3_USE_SSL', 'false') }}"
+        s3_url_style: path
+      external_root: "s3://{{ env_var('LAKE_BUCKET', 'lake') }}/gold"
+
+    # Same models, Snowflake engine:  dbt build --target snowflake
+    # Fill in SNOWFLAKE_* in .env after creating the trial account (see snowflake/README.md).
+    snowflake:
+      type: snowflake
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT', '') }}"
+      user: "{{ env_var('SNOWFLAKE_USER', '') }}"
+      # Key-pair auth (no password / MFA). Public key registered via snowflake/01_set_public_key.sql.
+      private_key_path: "{{ env_var('SNOWFLAKE_PRIVATE_KEY_PATH', '../snowflake/rsa_key.p8') }}"
+      role: "{{ env_var('SNOWFLAKE_ROLE', 'LAKE_DEV') }}"
+      warehouse: "{{ env_var('SNOWFLAKE_WAREHOUSE', 'LAKE_WH') }}"
+      database: "{{ env_var('SNOWFLAKE_DATABASE', 'LAKE') }}"
+      schema: dev
+      threads: 4

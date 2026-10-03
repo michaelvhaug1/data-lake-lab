@@ -1,0 +1,17 @@
+.venv/
+.env
+.dagster/
+minio-data/
+downloads/
+tools/
+warehouse.duckdb*
+lakehouse/target/
+lakehouse/dbt_packages/
+lakehouse/logs/
+logs/
+*.log
+__pycache__/
+.env.*
+!.env.local-minio
+snowflake/rsa_key.p8
+data/
